@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "minolab"
+version = "0.0.1"
+description = ""
+authors = ["4ytk3 <nuts13718@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flet = "^0.23.2"
+pillow = "^10.4.0"
+dm3-lib = {git = "https://github.com/piraynal/pyDM3reader.git"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
