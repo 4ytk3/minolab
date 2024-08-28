@@ -1,11 +1,14 @@
 from abc import ABC, abstractmethod
+from typing import Any
 from core.entities.image_data import ImageData
 
 class ImageRepository(ABC):
     @abstractmethod
-    def save(self, image_data: ImageData, path: str, format: str):
+    def save_to_file(self, image_data: ImageData, file_path: str) -> None:
+        """Save the image data to a file."""
         pass
 
     @abstractmethod
-    def load(self, path: str) -> ImageData:
+    def load_from_file(self, file_path: str) -> ImageData:
+        """Load image data from a file."""
         pass
