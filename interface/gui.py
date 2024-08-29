@@ -1,39 +1,37 @@
+# interfaces/gui.py
+
 import flet as ft
-from core.entities.image_data import ImageData
+from core.use_cases.image_conversion import ImageConversionUseCase
+from core.use_cases.image_processing import ImageProcessingUseCase
 from infrastructure.repositories.file_image_repository import FileImageRepository
-import numpy as np
 from PIL import Image
 
 def main(page: ft.Page):
-    # 初期設定
     page.title = "Image Viewer"
     page.window_width = 600
     page.window_height = 400
 
-    # リポジトリのインスタンスを作成
     repository = FileImageRepository()
+    conversion_use_case = ImageConversionUseCase(repository)
+    processing_use_case = ImageProcessingUseCase(repository)
 
-    # 画像を表示するためのImageコントロール
     image_display = ft.Image(src="", width=300, height=300, fit=ft.ImageFit.CONTAIN)
 
-    def pick_files_result(e: ft.FilePickerResultEvent):
+    def on_open_files_result(e: ft.FilePickerResultEvent):
         if e.files:
             file_path = e.files[0].path
-            # ファイルから画像を読み込む
             image_data = repository.load_from_file(file_path)
-            # PIL Imageオブジェクトに変換して表示
             img = Image.fromarray(image_data.get_data())
-            img.show()  # 画像を表示するための簡易的な方法
-
-            # GUI上の画像表示コントロールに画像を設定
+            img.show()
             image_display.src = file_path
             image_display.update()
 
-    def save_files_result(e: ft.FilePickerResultEvent):
+    def on_save_files_result(e: ft.FilePickerResultEvent):
         if e.path:
             try:
                 img = Image.open(image_display.src)
-                img.save(e.path)
+                image_data = repository.load_from_file(image_display.src)
+                conversion_use_case.convert_and_save(image_data, 'PNG', e.path)
                 page.snack_bar = ft.SnackBar(ft.Text(f"Image saved as {e.path}"))
                 page.snack_bar.open = True
                 page.update()
@@ -42,26 +40,17 @@ def main(page: ft.Page):
                 page.snack_bar.open = True
                 page.update()
 
-    # ToDo
-    # can't save
     def save_image(e):
-        # ファイルの保存ダイアログを表示
-        file_picker.save_file(
-            file_name="saved_image.png",
-            file_type="image/png"
-        )
+        save_file_picker.save_file(file_types=[("PNG files", "*.png")])
 
-    # ファイルピッカーコントロール
-    file_picker = ft.FilePicker(on_result=pick_files_result)
-    save_file_picker = ft.FilePicker(on_result=save_files_result)
-    page.overlay.append(file_picker)
+    open_file_picker = ft.FilePicker(on_result=on_open_files_result)
+    save_file_picker = ft.FilePicker(on_result=on_save_files_result)
+    page.overlay.append(open_file_picker)
     page.overlay.append(save_file_picker)
 
-    # ボタンとレイアウト
-    select_button = ft.ElevatedButton(text="Select Image", on_click=lambda e: file_picker.pick_files(allow_multiple=False))
-    save_button = ft.ElevatedButton(text="Save Image", on_click=save_image)
+    select_button = ft.ElevatedButton(text="Select Image", on_click=lambda e: open_file_picker.pick_files(allow_multiple=False))
+    save_button = ft.ElevatedButton(text="Save Image As...", on_click=save_image)
 
-    # ページに要素を追加
     page.add(select_button, save_button, image_display)
 
 if __name__ == "__main__":
