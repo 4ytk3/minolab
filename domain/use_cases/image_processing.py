@@ -1,5 +1,5 @@
-from core.entities.image_data import ImageData
-from core.repositories.image_repository import ImageRepository
+from domain.entities.image_data import ImageData
+from domain.repositories.image_repository import ImageRepository
 
 class ImageProcessingUseCase:
     def __init__(self, repository: ImageRepository):

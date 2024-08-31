@@ -1,4 +1,4 @@
-from core.entities.image_data import ImageData
+from domain.entities.image_data import ImageData
 
 class CustomAlgorithmUseCase:
     def execute_algorithm(self, image_data: ImageData) -> ImageData:

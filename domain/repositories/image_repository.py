@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from core.entities.image_data import ImageData
+from domain.entities.image_data import ImageData
 
 class ImageRepository(ABC):
     @abstractmethod

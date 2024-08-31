@@ -1,4 +1,4 @@
-from core.entities.image_data import ImageData
+from domain.entities.image_data import ImageData
 from typing import List
 
 class TomographyUseCase:
