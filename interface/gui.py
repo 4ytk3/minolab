@@ -1,23 +1,21 @@
-# interfaces/gui.py
-
 import flet as ft
-from core.use_cases.image_conversion import ImageConversionUseCase
-from core.use_cases.image_processing import ImageProcessingUseCase
+from core.use_cases.average_hole_diameter_calculation import AverageHoleDiameterCalculationUseCase
 from infrastructure.repositories.file_image_repository import FileImageRepository
 from PIL import Image
 
 def main(page: ft.Page):
-    page.title = "Image Viewer"
+    page.title = "Average Hole Diameter Calculation"
     page.window_width = 600
     page.window_height = 400
 
     repository = FileImageRepository()
-    conversion_use_case = ImageConversionUseCase(repository)
-    processing_use_case = ImageProcessingUseCase(repository)
+    hole_diameter_use_case = AverageHoleDiameterCalculationUseCase()
 
     image_display = ft.Image(src="", width=300, height=300, fit=ft.ImageFit.CONTAIN)
+    image_data = None
 
     def on_open_files_result(e: ft.FilePickerResultEvent):
+        nonlocal image_data
         if e.files:
             file_path = e.files[0].path
             image_data = repository.load_from_file(file_path)
@@ -26,12 +24,16 @@ def main(page: ft.Page):
             image_display.src = file_path
             image_display.update()
 
+            average_diameter = hole_diameter_use_case.calculate_average_hole_diameter(image_data)
+            page.snack_bar = ft.SnackBar(ft.Text(f"Average Hole Diameter: {average_diameter:.2f} pixels"))
+            page.snack_bar.open = True
+            page.update()
+
     def on_save_files_result(e: ft.FilePickerResultEvent):
-        if e.path:
+        if e.path and image_data:
             try:
-                img = Image.open(image_display.src)
-                image_data = repository.load_from_file(image_display.src)
-                conversion_use_case.convert_and_save(image_data, 'PNG', e.path)
+                # 画像を元のフォーマットで保存
+                repository.save_to_file(image_data, e.path)
                 page.snack_bar = ft.SnackBar(ft.Text(f"Image saved as {e.path}"))
                 page.snack_bar.open = True
                 page.update()
@@ -41,7 +43,7 @@ def main(page: ft.Page):
                 page.update()
 
     def save_image(e):
-        save_file_picker.save_file(file_types=[("PNG files", "*.png")])
+        save_file_picker.save_file(file_types=[("PNG files", "*.png"), ("JPEG files", "*.jpg"), ("All files", "*.*")])
 
     open_file_picker = ft.FilePicker(on_result=on_open_files_result)
     save_file_picker = ft.FilePicker(on_result=on_save_files_result)
