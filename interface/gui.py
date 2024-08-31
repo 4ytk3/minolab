@@ -1,5 +1,5 @@
 import flet as ft
-from core.use_cases.average_hole_diameter_calculation import AverageHoleDiameterCalculationUseCase
+from domain.use_cases.average_hole_diameter_calculation import AverageHoleDiameterCalculationUseCase
 from infrastructure.repositories.file_image_repository import FileImageRepository
 from PIL import Image
 
