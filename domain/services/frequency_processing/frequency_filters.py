@@ -1,8 +1,21 @@
 import cv2
 import numpy as np
-from domain.entities.image_data import ImageData
+from domain.config.frequency_processing_types import FrequencyProcessingTypes
+from domain.services.processing_registry import ProcessingRegistry
 from domain.services.frequency_processing.frequency_processing_interface import FrequencyProcessingInterface
 from domain.services.image_processing_helpers import apply_fft, apply_ifft
+
+class FFT(FrequencyProcessingInterface):
+    def __init__(self, requires_grayscale: bool = True):
+        self.requires_grayscale = requires_grayscale
+
+    def apply(self, gray_image: np.ndarray) -> np.ndarray:
+        fft_image = apply_fft(gray_image)
+
+    def make_mask(self, shape: tuple, **kwargs) -> np.ndarray:
+        height, width = shape
+        mask = np.ones([height, width], dtype=np.uint8)
+        return mask
 
 class LowpassFilter(FrequencyProcessingInterface):
     def apply(self, image_data: ImageData, radius: int = 90) -> ImageData:

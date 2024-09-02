@@ -1,4 +1,4 @@
-class CategoryTypes:
+class SpatialProcessingTypes:
     # 二値化
     THRESHOLD_BINARIZATION = 'threshold_binarization'
     OTSU_BINARIZATION = 'otsu_binarization'

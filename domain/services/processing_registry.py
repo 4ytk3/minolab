@@ -1,4 +1,4 @@
-class SpatialProcessingRegistry:
+class ProcessingRegistry:
     _processing = {}
 
     @classmethod
@@ -12,7 +12,6 @@ class SpatialProcessingRegistry:
 
     @classmethod
     def get_processing(cls, category):
-        print(cls._processing)
         processing_cls = cls._processing.get(category)
         if not processing_cls:
             raise ValueError(f"Filter '{category}' is not registered.")

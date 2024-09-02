@@ -15,6 +15,9 @@ class ImageData:
     def get_format(self) -> str:
         return self.format
 
+    def get_color_space(self) -> str:
+        return self.color_space
+
     def get_size(self) -> Tuple[int, int]:
         if len(self.data.shape) >= 2:
             return self.data.shape[:2]
@@ -22,4 +25,4 @@ class ImageData:
             raise ValueError("Invalid image data shape")
 
     def __repr__(self) -> str:
-        return f"ImageData(size={self.get_size()}, format={self.format})"
+        return f"ImageData(size={self.get_size()}, format={self.format}, colorspace={self.color_space})"

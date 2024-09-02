@@ -1,5 +1,7 @@
-from domain.config.category_types import CategoryTypes
+from domain.config.spatial_processing_types import SpatialProcessingTypes
+from domain.config.frequency_processing_types import FrequencyProcessingTypes
 from domain.use_cases.apply_spatial_processing import ApplySpatialProcessing
+from domain.use_cases.apply_frequency_processing import ApplyFrequencyProcessing
 from domain.entities.image_data import ImageData
 import domain.services.spatial_processing.binarizations
 import domain.services.spatial_processing.spatial_filters
@@ -13,7 +15,7 @@ image_array = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 image_data = ImageData(data=image_array, format="jpg")
 
 # フィルタを適用
-spatial_processing = ApplySpatialProcessing(CategoryTypes.LAPLACIAN_FILTER)
+spatial_processing = ApplySpatialProcessing(SpatialProcessingTypes.LAPLACIAN_FILTER)
 processed_image_data = spatial_processing.apply_processing(image_data)
 
 # 結果を表示
