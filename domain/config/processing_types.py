@@ -18,3 +18,9 @@ class SpatialProcessingTypes:
 
     # 他のフィルタや処理タイプがあればここに追加
     # 例: CUSTOM_FILTER = 'custom_filter'
+
+class FrequencyProcessingTypes:
+    # ノイズ処理
+    LOWPASS_FILTER = 'lowpass_filter'
+    HIGHPASS_FILTER = 'highpass_filter'
+    BANDPASS_FILTER = 'bandpass_filter'
