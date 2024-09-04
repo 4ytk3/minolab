@@ -2,12 +2,16 @@ from typing import Tuple
 import numpy as np
 
 class ImageData:
-    def __init__(self, data: np.ndarray, format: str = "JPEG", color_space: str = "RGB"):
+    def __init__(self, filename: str, data: np.ndarray, format: str = "JPEG", color_space: str = "RGB", ):
         if not isinstance(data, np.ndarray):
             raise ValueError("data must be a numpy ndarray")
+        self.filename = filename
         self.data = data
         self.format = format
         self.color_space = color_space
+
+    def get_filename(self) -> str:
+        return self.filename
 
     def get_data(self) -> np.ndarray:
         return self.data
