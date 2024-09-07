@@ -16,7 +16,7 @@ class FrequencyBaseFilter(FrequencyProcessingInterface):
         masked_fft[masked_fft == 0] = np.finfo(float).eps
 
         fft_image = 20 * np.log(np.abs(masked_fft)).astype(np.float32)
-        ifft_image = ifft(masked_fft)
+        ifft_image = ifft(masked_fft).astype(np.uint8)
 
         return fft_image, ifft_image
 

@@ -8,19 +8,19 @@ import numpy as np
 from skimage.feature import peak_local_max
 
 @FrequencyProcessingRegistry.register(FrequencyProcessingTypes.PEAK_DETECTOR)
-class PeakFilter(FrequencyProcessingInterface):
+class PeakDetector(FrequencyProcessingInterface):
     REQUIRES_GRAYSCALE = True
 
-    def apply(self, gray_image: np.ndarray, radius: int = 3, min_distance=10, threshold_abs=None, peak_threshold: float = 0.8) -> np.ndarray:
+    def apply(self, gray_image: np.ndarray, exclude_radius: int = 30, radius: int = 3, min_distance=10, threshold_abs=None, peak_threshold: float = 0.8) -> np.ndarray:
         shifted_fft = fft(gray_image)
-        shifted_fft = self.remove_low_frequencies(shifted_fft, exclude_radius=30)
+        shifted_fft = self.remove_low_frequencies(shifted_fft, exclude_radius=exclude_radius)
         peak_image = self.detect_peaks(shifted_fft, min_distance=min_distance, threshold_abs=threshold_abs, peak_threshold=peak_threshold)
         mask = self.make_mask(peak_image, shifted_fft.shape, radius=radius)
         masked_fft = shifted_fft * mask
         masked_fft[masked_fft == 0] = np.finfo(float).eps
 
         fft_image = 20 * np.log(np.abs(masked_fft)).astype(np.float32)
-        ifft_image = ifft(masked_fft)
+        ifft_image = ifft(masked_fft).astype(np.uint8)
 
         return fft_image, ifft_image
 
