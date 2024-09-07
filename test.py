@@ -1,5 +1,5 @@
 from domain.services.spatial_processing import spatial_filters, binarizations, edge_detectors
-from domain.services.frequency_processing import frequency_filters
+from domain.services.frequency_processing import frequency_filters, peak_detector
 
 from domain.config.processing_types import SpatialProcessingTypes, FrequencyProcessingTypes
 from domain.use_cases.image_processor import SpatialProcessing, FrequencyProcessing
@@ -43,7 +43,8 @@ def apply_and_save_frequency_filter(processing_type, image_data, output_dir, fft
 
 def main():
     # 画像パスと出力ディレクトリ
-    image_path = "test_images/nacl_01.jpg"
+    image_path = "test_images/test.jpg"
+    #image_path = "test_images/nacl_01.jpg"
     output_dir = "output_images"
 
     # 画像を読み込み
@@ -59,8 +60,6 @@ def main():
         fft_file_name = f"{processing_type.name.lower()}_fft.jpg"
         ifft_file_name = f"{processing_type.name.lower()}_ifft.jpg"
         apply_and_save_frequency_filter(processing_type, image_data, output_dir, fft_file_name, ifft_file_name)
-
-    print("全てのフィルタ処理が完了しました。")
 
 if __name__ == "__main__":
     main()

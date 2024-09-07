@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from domain.entities.image_data import ImageData
+
 import numpy as np
 
 class FrequencyProcessingInterface(ABC):

@@ -26,3 +26,6 @@ class FrequencyProcessingTypes(Enum):
     LOWPASS_FILTER = 'lowpass_filter'
     HIGHPASS_FILTER = 'highpass_filter'
     BANDPASS_FILTER = 'bandpass_filter'
+
+    # ピーク検出
+    PEAK_DETECTOR = 'peak_detector'
