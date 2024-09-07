@@ -15,7 +15,7 @@ class SpatialProcessingTypes(Enum):
     # エッジ抽出
     CANNY_EDGE_DETECTOR = 'canny_edge_detector'
     PREWITT_FILTER = 'prewitt_filter'
-    SOBELFILTER = 'sobel_filter'
+    SOBEL_FILTER = 'sobel_filter'
     LAPLACIAN_FILTER = 'laplacian_filter'
 
     # 他のフィルタや処理タイプがあればここに追加
