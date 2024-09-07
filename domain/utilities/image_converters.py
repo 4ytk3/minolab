@@ -4,9 +4,16 @@ from domain.entities.image_data import ImageData
 
 def rgb2gray(image_data: ImageData) -> ImageData:
     return ImageData(
-        image=cv2.cvtColor(image_data.get_image().astype(np.uint8)),
-        format=image_data.get_format(),
-        space='grayscale'
+        image = cv2.cvtColor(image_data.get_image().astype(np.uint8), cv2.COLOR_RGB2GRAY),
+        format = image_data.get_format(),
+        space = 'grayscale'
+    )
+
+def gray2rgb(image_data: ImageData) -> ImageData:
+    return ImageData(
+        image = cv2.cvtColor(image_data.get_image().astype(np.uint8), cv2.COLOR_GRAY2RGB),
+        format = image_data.get_format(),
+        space = 'rgb'
     )
 
 def fft(image: np.ndarray) -> np.ndarray:
