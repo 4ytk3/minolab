@@ -19,5 +19,8 @@ def gray2rgb(image_data: ImageData) -> ImageData:
 def fft(image: np.ndarray) -> np.ndarray:
     return np.fft.fftshift(np.fft.fft2(image))
 
-def ifft(image: np.ndarray) -> np.ndarray:
-    return np.abs(np.fft.ifft2(np.fft.fftshift(image)))
+def get_spectrum(shifted_fft: np.ndarray) -> np.ndarray:
+    return 20 * np.log(np.abs(shifted_fft)).astype(np.float32)
+
+def ifft(shifted_fft: np.ndarray) -> np.ndarray:
+    return np.abs(np.fft.ifft2(np.fft.fftshift(shifted_fft))).astype(np.uint8)
