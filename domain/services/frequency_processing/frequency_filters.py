@@ -1,7 +1,7 @@
 from domain.config.processing_types import FrequencyProcessingTypes
 from domain.services.processing_registry import FrequencyProcessingRegistry
 from domain.services.frequency_processing.frequency_processing_interface import FrequencyProcessingInterface
-from domain.utilities.image_converters import fft, ifft
+from domain.utilities.image_converters import fft, get_spectrum, ifft
 
 import cv2
 import numpy as np
@@ -15,8 +15,8 @@ class FrequencyBaseFilter(FrequencyProcessingInterface):
         masked_fft = shifted_fft * mask
         masked_fft[masked_fft == 0] = np.finfo(float).eps
 
-        fft_image = 20 * np.log(np.abs(masked_fft)).astype(np.float32)
-        ifft_image = ifft(masked_fft).astype(np.uint8)
+        fft_image = get_spectrum(shifted_fft=shifted_fft)
+        ifft_image = ifft(shifted_fft=masked_fft).astype(np.uint8)
 
         return fft_image, ifft_image
 
