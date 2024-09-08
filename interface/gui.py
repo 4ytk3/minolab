@@ -1,59 +1,101 @@
 import flet as ft
-from domain.use_cases.average_hole_diameter_calculation import AverageHoleDiameterCalculationUseCase
-from infrastructure.repositories.file_image_repository import FileImageRepository
-from PIL import Image
+from PIL import Image, ImageEnhance, ImageFilter
+import io
+import base64
 
 def main(page: ft.Page):
-    page.title = "Average Hole Diameter Calculation"
-    page.window_width = 600
-    page.window_height = 400
+    page.title = "画像処理アプリ"
+    page.padding = 20
+    page.theme_mode = ft.ThemeMode.LIGHT
 
-    repository = FileImageRepository()
-    hole_diameter_use_case = AverageHoleDiameterCalculationUseCase()
+    def encode_image(img):
+        buf = io.BytesIO()
+        img.save(buf, format='PNG')
+        return base64.b64encode(buf.getvalue()).decode('utf-8')
 
-    image_display = ft.Image(src="", width=300, height=300, fit=ft.ImageFit.CONTAIN)
-    image_data = None
-
-    def on_open_files_result(e: ft.FilePickerResultEvent):
-        nonlocal image_data
+    def on_upload(e: ft.FilePickerResultEvent):
         if e.files:
-            file_path = e.files[0].path
-            image_data = repository.load_from_file(file_path)
-            img = Image.fromarray(image_data.get_data())
-            img.show()
-            image_display.src = file_path
-            image_display.update()
-
-            average_diameter = hole_diameter_use_case.calculate_average_hole_diameter(image_data)
-            page.snack_bar = ft.SnackBar(ft.Text(f"Average Hole Diameter: {average_diameter:.2f} pixels"))
-            page.snack_bar.open = True
+            global original_image
+            original_image = Image.open(e.files[0].path)
+            encoded_image = encode_image(original_image)
+            image_view.src = f"data:image/png;base64,{encoded_image}"
+            image_view.visible = True
+            controls_column.visible = True
             page.update()
 
-    def on_save_files_result(e: ft.FilePickerResultEvent):
-        if e.path and image_data:
-            try:
-                # 画像を元のフォーマットで保存
-                repository.save_to_file(image_data, e.path)
-                page.snack_bar = ft.SnackBar(ft.Text(f"Image saved as {e.path}"))
-                page.snack_bar.open = True
-                page.update()
-            except Exception as ex:
-                page.snack_bar = ft.SnackBar(ft.Text(f"Failed to save image: {str(ex)}"))
-                page.snack_bar.open = True
-                page.update()
+    def apply_filter(e):
+        if not original_image:
+            return
+
+        img = original_image.copy()
+
+        # フィルター適用
+        if filter_dropdown.value == "グレースケール":
+            img = img.convert('L').convert('RGB')
+        elif filter_dropdown.value == "セピア":
+            sepia = lambda x: tuple(int(x[0] * 0.393 + x[1] * 0.769 + x[2] * 0.189) for _ in range(3))
+            img = img.convert('RGB', matrix=sepia)
+        elif filter_dropdown.value == "ぼかし":
+            img = img.filter(ImageFilter.BLUR)
+
+        # 明るさ調整
+        enhancer = ImageEnhance.Brightness(img)
+        img = enhancer.enhance(brightness_slider.value / 100)
+
+        encoded_image = encode_image(img)
+        processed_image_view.src = f"data:image/png;base64,{encoded_image}"
+        processed_image_view.visible = True
+        download_button.visible = True
+        page.update()
 
     def save_image(e):
-        save_file_picker.save_file(file_types=[("PNG files", "*.png"), ("JPEG files", "*.jpg"), ("All files", "*.*")])
+        img_data = base64.b64decode(processed_image_view.src.split(',')[1])
+        save_path = ft.FilePicker()
+        save_path.save_file(file_name="processed_image.png", allowed_extensions=["png"])
+        page.overlay.append(save_path)
+        page.update()
 
-    open_file_picker = ft.FilePicker(on_result=on_open_files_result)
-    save_file_picker = ft.FilePicker(on_result=on_save_files_result)
-    page.overlay.append(open_file_picker)
-    page.overlay.append(save_file_picker)
+    file_picker = ft.FilePicker(on_result=on_upload)
+    page.overlay.append(file_picker)
 
-    select_button = ft.ElevatedButton(text="Select Image", on_click=lambda e: open_file_picker.pick_files(allow_multiple=False))
-    save_button = ft.ElevatedButton(text="Save Image As...", on_click=save_image)
+    upload_button = ft.ElevatedButton("画像をアップロード", icon=ft.icons.UPLOAD_FILE, on_click=lambda _: file_picker.pick_files())
 
-    page.add(select_button, save_button, image_display)
+    image_view = ft.Image(visible=False, fit=ft.ImageFit.CONTAIN, width=300, height=300)
 
-if __name__ == "__main__":
-    ft.app(target=main)
+    filter_dropdown = ft.Dropdown(
+        label="フィルター",
+        options=[
+            ft.dropdown.Option("なし"),
+            ft.dropdown.Option("グレースケール"),
+            ft.dropdown.Option("セピア"),
+            ft.dropdown.Option("ぼかし"),
+        ],
+        value="なし",
+        width=200,
+    )
+
+    brightness_slider = ft.Slider(min=0, max=200, value=100, label="明るさ: {value}%")
+
+    apply_button = ft.ElevatedButton("適用", on_click=apply_filter)
+
+    processed_image_view = ft.Image(visible=False, fit=ft.ImageFit.CONTAIN, width=300, height=300)
+
+    download_button = ft.ElevatedButton("ダウンロード", icon=ft.icons.DOWNLOAD, on_click=save_image, visible=False)
+
+    controls_column = ft.Column([
+        filter_dropdown,
+        brightness_slider,
+        apply_button
+    ], visible=False)
+
+    page.add(
+        ft.Column([
+            upload_button,
+            image_view,
+            controls_column,
+            processed_image_view,
+            download_button
+        ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    )
+
+ft.app(target=main)
