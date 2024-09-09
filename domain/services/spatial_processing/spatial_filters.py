@@ -9,7 +9,7 @@ from domain.services.spatial_processing.spatial_processing_interface import Spat
 class AverageFilter(SpatialProcessingInterface):
     REQUIRES_GRAYSCALE = False
 
-    def apply(self, image: np.ndarray, kernel_size: int = 3) -> np.ndarray:
+    def apply(self, image: np.ndarray, kernel_size: int = 3, **kwargs) -> np.ndarray:
         filtered_image = cv2.blur(src=image, ksize=(kernel_size, kernel_size))
         return filtered_image
 
@@ -18,7 +18,7 @@ class AverageFilter(SpatialProcessingInterface):
 class MedianFilter(SpatialProcessingInterface):
     REQUIRES_GRAYSCALE = False
 
-    def apply(self, image: np.ndarray, kernel_size: int = 3) -> np.ndarray:
+    def apply(self, image: np.ndarray, kernel_size: int = 3, **kwargs) -> np.ndarray:
         filtered_image = cv2.medianBlur(src=image, ksize=kernel_size)
         return filtered_image
 
@@ -27,7 +27,7 @@ class MedianFilter(SpatialProcessingInterface):
 class GaussianFilter(SpatialProcessingInterface):
     REQUIRES_GRAYSCALE = False
 
-    def apply(self, image: np.ndarray, kernel_size: int = 3, sigmaX: int = 3) -> np.ndarray:
+    def apply(self, image: np.ndarray, kernel_size: int = 3, sigmaX: int = 3, **kwargs) -> np.ndarray:
         filtered_image = cv2.GaussianBlur(src=image, ksize=(kernel_size, kernel_size), sigmaX=sigmaX)
         return filtered_image
 
@@ -36,6 +36,6 @@ class GaussianFilter(SpatialProcessingInterface):
 class BilateralFilter(SpatialProcessingInterface):
     REQUIRES_GRAYSCALE = False
 
-    def apply(self, image: np.ndarray, kernel_size: int = 3, sigmaColor=50, sigmaSpace=50) -> np.ndarray:
+    def apply(self, image: np.ndarray, kernel_size: int = 3, sigmaColor=50, sigmaSpace=50, **kwargs) -> np.ndarray:
         filtered_image = cv2.bilateralFilter(src=image, d=kernel_size, sigmaColor=sigmaColor, sigmaSpace=sigmaSpace)
         return filtered_image

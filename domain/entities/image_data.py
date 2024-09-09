@@ -17,4 +17,4 @@ class ImageData:
         return self.space
 
     def __repr__(self) -> str:
-        return f"ImageData(name={self.name}, format={self.format}, space={self.space})"
+        return f"ImageData(name={self.image}, format={self.format}, space={self.space})"

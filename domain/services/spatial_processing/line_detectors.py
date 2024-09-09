@@ -3,8 +3,8 @@ import statistics
 from decimal import ROUND_HALF_UP, Decimal
 import cv2
 import numpy as np
-from pylsd import lsd
-from image_processor import Image
+#from pylsd import lsd
+#from image_processor import Image
 
 #TODO: add Line Detect Abstract class and define draw line functions
 class HoughTransform(Image):

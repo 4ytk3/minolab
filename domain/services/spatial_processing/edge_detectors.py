@@ -17,7 +17,7 @@ class CannyEdgeDetector(SpatialProcessingInterface):
 class PrewittFilter(SpatialProcessingInterface):
     REQUIRES_GRAYSCALE = True
 
-    def apply(self, gray_image: np.ndarray, kernel_size: int = 3) -> np.ndarray:
+    def apply(self, gray_image: np.ndarray, kernel_size: int = 3, **kwargs) -> np.ndarray:
         prewitt_x, prewitt_y = self.make_kernel(kernel_size)
         edge_x = cv2.filter2D(gray_image, -1, prewitt_x)
         edge_y = cv2.filter2D(gray_image, -1, prewitt_y)
@@ -39,7 +39,7 @@ class PrewittFilter(SpatialProcessingInterface):
 class SobelFilter(SpatialProcessingInterface):
     REQUIRES_GRAYSCALE = True
 
-    def apply(self, gray_image: np.ndarray, dx=1, dy=1, kernel_size=3, amp=3) -> np.ndarray:
+    def apply(self, gray_image: np.ndarray, dx=1, dy=1, kernel_size=3, amp=3, **kwargs) -> np.ndarray:
         edge_x = cv2.Sobel(src=gray_image, ddepth=cv2.CV_8U, dx=dx, dy=dy, ksize=kernel_size) # X方向
         edge_y = cv2.Sobel(src=gray_image, ddepth=cv2.CV_8U, dx=dx, dy=dy, ksize=kernel_size) # Y方向
         edge_x = cv2.convertScaleAbs(src=edge_x, alpha=0.5)
@@ -51,5 +51,5 @@ class SobelFilter(SpatialProcessingInterface):
 class LaplacianEdgeDetector(SpatialProcessingInterface):
     REQUIRES_GRAYSCALE = True
 
-    def apply(self, gray_image: np.ndarray, kernel_size=3, amp=3) -> np.ndarray:
+    def apply(self, gray_image: np.ndarray, kernel_size=3, amp=3, **kwargs) -> np.ndarray:
         return cv2.convertScaleAbs(cv2.Laplacian(src=gray_image, ddepth=cv2.CV_8U, ksize=kernel_size)) * amp

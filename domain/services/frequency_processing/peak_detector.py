@@ -11,7 +11,7 @@ from skimage.feature import peak_local_max
 class PeakDetector(FrequencyProcessingInterface):
     REQUIRES_GRAYSCALE = True
 
-    def apply(self, gray_image: np.ndarray, exclude_radius: int = 30, radius: int = 3, min_distance=10, threshold_abs=None, peak_threshold: float = 0.8) -> np.ndarray:
+    def apply(self, gray_image: np.ndarray, exclude_radius: int = 30, radius: int = 3, min_distance=10, threshold_abs=None, peak_threshold: float = 0.8, **kwargs) -> np.ndarray:
         shifted_fft = fft(gray_image)
         shifted_fft = self.remove_low_frequencies(shifted_fft, exclude_radius=exclude_radius)
         peak_image = self.detect_peaks(shifted_fft, min_distance=min_distance, threshold_abs=threshold_abs, peak_threshold=peak_threshold)
