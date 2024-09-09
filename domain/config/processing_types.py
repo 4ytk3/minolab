@@ -1,31 +1,31 @@
 from enum import Enum
 
 class SpatialProcessingTypes(Enum):
-    # 二値化
-    THRESHOLD_BINARIZATION = 'threshold_binarization'
-    OTSU_BINARIZATION = 'otsu_binarization'
-    ADAPTIVE_BINARIZATION = 'adaptive_binarization'
-
     # ノイズ処理
-    AVERAGE_FILTER = 'average_filter'
-    MEDIAN_FILTER = 'median_filter'
-    GAUSSIAN_FILTER = 'gaussian_filter'
-    BILATERAL_FILTER = 'bilateral_filter'
+    AVERAGE_FILTER = "Average Filter"
+    MEDIAN_FILTER = "Median Filter"
+    GAUSSIAN_FILTER = "Gaussian Filter"
+    BILATERAL_FILTER = "Bilateral Filter"
+
+    # 二値化
+    THRESHOLD_BINARIZATION = "Threshold Binarization"
+    OTSU_BINARIZATION = "Otsu Binarization"
+    ADAPTIVE_BINARIZATION = "Adaptive Binarization"
 
     # エッジ抽出
-    CANNY_EDGE_DETECTOR = 'canny_edge_detector'
-    PREWITT_FILTER = 'prewitt_filter'
-    SOBEL_FILTER = 'sobel_filter'
-    LAPLACIAN_FILTER = 'laplacian_filter'
+    CANNY_EDGE_DETECTOR = "Canny Edge Detector"
+    PREWITT_FILTER = "Prewitt Filter"
+    SOBEL_FILTER = "Sobel Filter"
+    LAPLACIAN_FILTER = "Laplacian Filter"
 
     # 他のフィルタや処理タイプがあればここに追加
-    # 例: CUSTOM_FILTER = 'custom_filter'
+    # 例: CUSTOM_FILTER = "Custom Filter"
 
 class FrequencyProcessingTypes(Enum):
     # ノイズ処理
-    LOWPASS_FILTER = 'lowpass_filter'
-    HIGHPASS_FILTER = 'highpass_filter'
-    BANDPASS_FILTER = 'bandpass_filter'
+    LOWPASS_FILTER = "Lowpass Filter"
+    HIGHPASS_FILTER = "Highpass Filter"
+    BANDPASS_FILTER = "Bandpass Filter"
 
     # ピーク検出
-    PEAK_DETECTOR = 'peak_detector'
+    PEAK_DETECTOR = "Peak Detector"

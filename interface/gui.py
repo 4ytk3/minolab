@@ -16,7 +16,7 @@ def main(page: ft.Page):
     page.padding = 0
     page.theme_mode = ft.ThemeMode.LIGHT
     page.window.width = 1200
-    page.window.height = 1200
+    page.window.height = 800
     page.window.resizable = True
     current_function = ft.Text("Image Processing", size=24, weight=ft.FontWeight.BOLD)
 
@@ -129,7 +129,7 @@ def main(page: ft.Page):
     select_images_button = ft.ElevatedButton("Select Images", icon=ft.icons.PHOTO_LIBRARY, on_click=lambda _: file_picker.pick_files(allow_multiple=True))
     select_folder_button = ft.ElevatedButton("Select Folder", icon=ft.icons.FOLDER, on_click=lambda _: folder_picker.get_directory_path())
 
-    preview_image = ft.Image(visible=False, fit=ft.ImageFit.CONTAIN, width=500, height=500)
+    preview_image = ft.Image(visible=False, fit=ft.ImageFit.CONTAIN, width=400, height=400)
     image_name = ft.Text("", size=14)
 
     left_arrow = ft.IconButton(ft.icons.ARROW_BACK_IOS_NEW, visible=False, on_click=lambda _: navigate_image(-1))
@@ -197,12 +197,12 @@ def main(page: ft.Page):
     def on_binarization_option_change(e):
         selected_option = e.control.value
         hide_all_sliders()
-        if selected_option == "Threshold":
+        if selected_option == "Threshold Binarization":
             processing_type = SpatialProcessingTypes.THRESHOLD_BINARIZATION
             threshold_slider.visible = True
-        elif selected_option == "Otsu's Method":
+        elif selected_option == "Otsu Binarization":
             processing_type = SpatialProcessingTypes.OTSU_BINARIZATION
-        elif selected_option == "Adaptive Threshold":
+        elif selected_option == "Adaptive Binarization":
             processing_type = SpatialProcessingTypes.ADAPTIVE_BINARIZATION
             adaptive_kernel_size_slider.visible = True
         apply_preview(processing_type)
@@ -211,7 +211,7 @@ def main(page: ft.Page):
     def on_edge_detection_option_change(e):
         selected_option = e.control.value
         hide_all_sliders()
-        if selected_option == "Canny Edge Detection":
+        if selected_option == "Canny Edge Detector":
             processing_type = SpatialProcessingTypes.CANNY_EDGE_DETECTOR
             canny_low_threshold_slider.visible = True
             canny_high_threshold_slider.visible = True
@@ -282,9 +282,9 @@ def main(page: ft.Page):
     binarization_options = ft.Dropdown(
         label="Binarization Method",
         options=[
-            ft.dropdown.Option("Threshold"),
-            ft.dropdown.Option("Otsu's Method"),
-            ft.dropdown.Option("Adaptive Threshold"),
+            ft.dropdown.Option("Threshold Binarization"),
+            ft.dropdown.Option("Otsu Binarization"),
+            ft.dropdown.Option("Adaptive Binarization"),
         ],
         on_change=on_binarization_option_change,
         visible=False,
@@ -296,7 +296,7 @@ def main(page: ft.Page):
     edge_detection_options = ft.Dropdown(
         label="Edge Detection Method",
         options=[
-            ft.dropdown.Option("Canny Edge Detection"),
+            ft.dropdown.Option("Canny Edge Detector"),
             ft.dropdown.Option("Prewitt Filter"),
             ft.dropdown.Option("Sobel Filter"),
             ft.dropdown.Option("Laplacian Filter"),
