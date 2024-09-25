@@ -12,11 +12,14 @@ import os
 import cv2
 
 def main(page: ft.Page):
+    # setting
     page.title = "minolab"
     page.padding = 0
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.window.width = 1200
-    page.window.height = 800
+    page.window.width = 1200 # 初期幅
+    page.window.height = 800 # 初期高さ
+    page.window.min_width = 400  # 最小幅
+    page.window.min_height = 300  # 最小高さ
     page.window.resizable = True
     current_function = ft.Text("Image Processing", size=24, weight=ft.FontWeight.BOLD)
 
@@ -32,6 +35,7 @@ def main(page: ft.Page):
         nav_rail.visible = not nav_rail.visible
         page.update()
 
+    # 左側のサイドバー
     nav_rail = ft.NavigationRail(
         selected_index=0,
         label_type=ft.NavigationRailLabelType.ALL,
@@ -42,7 +46,7 @@ def main(page: ft.Page):
             ft.NavigationRailDestination(icon=ft.icons.IMAGE, selected_icon=ft.icons.FILTER, label="Image Processing"),
             ft.NavigationRailDestination(icon=ft.icons.AUTO_AWESOME, selected_icon=ft.icons.AUTO_AWESOME, label="Fourier Transform"),
             ft.NavigationRailDestination(icon=ft.icons.AUTO_FIX_HIGH, selected_icon=ft.icons.AUTO_FIX_HIGH, label="Crystal Detector"),
-            ft.NavigationRailDestination(icon=ft.icons.CIRCLE, selected_icon=ft.icons.CIRCLE, label="Calc Average Diameter"),
+            ft.NavigationRailDestination(icon=ft.icons.CIRCLE, selected_icon=ft.icons.CIRCLE, label="Calc Ave Diam (TEM)"),
             ft.NavigationRailDestination(icon=ft.icons.VIEW_IN_AR, selected_icon=ft.icons.VIEW_IN_AR, label="Tomography"),
         ],
         on_change=change_tab,
@@ -315,7 +319,7 @@ def main(page: ft.Page):
         options=[
             ft.dropdown.Option("Hough Transform"),
             ft.dropdown.Option("Probabilistic Hough Transform"),
-            ft.dropdown.Option("LSD"),
+            ft.dropdown.Option("Line Segment Detector"),
         ],
         visible=False,
     )
@@ -477,6 +481,7 @@ def main(page: ft.Page):
         ft.IconButton(ft.icons.CLOSE, on_click=lambda _: page.window.close()),
     ])
 
+    # 右側の実行画面
     content_area = ft.Container(
         content=ft.Column([
             ft.Row([
