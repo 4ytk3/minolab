@@ -23,7 +23,7 @@ def main(page: ft.Page):
     page.window.resizable = True
     current_function = ft.Text("Image Processing", size=24, weight=ft.FontWeight.BOLD)
 
-    def change_tab(e):
+    def change_tab(e: ft.FilePickerResultEvent):
         selected_index = e.control.selected_index
         nav_rail.selected_index = selected_index
         current_function.value = nav_rail.destinations[selected_index].label
@@ -31,7 +31,7 @@ def main(page: ft.Page):
             content.visible = (i == selected_index)
         page.update()
 
-    def toggle_nav_rail(e):
+    def toggle_nav_rail():
         nav_rail.visible = not nav_rail.visible
         page.update()
 
